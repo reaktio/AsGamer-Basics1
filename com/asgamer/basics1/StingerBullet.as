@@ -7,44 +7,43 @@ package com.asgamer.basics1
 	import flash.display.Stage;
 	import flash.events.Event;
 	
-	public class LaserBlue extends MovieClip
+	public class StingerBullet extends MovieClip
 	{
 		
 		private var stageRef:Stage;
-		private var bulletSpeed:Number = 16;
+		private var target:Ship;
 		
-		public function LaserBlue (stageRef:Stage, x:Number, y:Number) : void
+		private var vx:Number;
+		
+		public function StingerBullet(stageRef:Stage, target:Ship, x:Number, y:Number, vx:Number) : void
 		{
 			this.stageRef = stageRef;
+			this.target = target;
 			this.x = x;
 			this.y = y;
+			this.vx = vx;
 			
 			addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
 		}
 		
 		private function loop(e:Event) : void
 		{
-			//move bullet up
-			y -= bulletSpeed;
+			x += vx;
 			
-			if (y < 0)
+			if (x > stageRef.stageWidth || x < 0)
 				removeSelf();
 			
-			for (var i:int = 0; i < Engine.enemyList.length; i++)
+			if (hitTestObject(target.hit))
 			{
-				if (hitTestObject(Engine.enemyList[i].hit))
-				{
-					trace("hitEnemy");
-					Engine.enemyList[i].takeHit();
-					removeSelf();
-				}
+				trace("hitME");
+				stageRef.addChild(new SmallImplosion(stageRef, x, y));
+				removeSelf();
 			}
 		}
 		
 		private function removeSelf() : void
 		{
 			removeEventListener(Event.ENTER_FRAME, loop);
-			
 			if (stageRef.contains(this))
 				stageRef.removeChild(this);
 		}
@@ -52,3 +51,4 @@ package com.asgamer.basics1
 	}
 	
 }
+
