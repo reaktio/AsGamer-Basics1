@@ -30,12 +30,12 @@ package com.asgamer.basics1
 		{
 			x += vx;
 			
-			if (x > stageRef.stageWidth || x < 0)
+			if (x &gt; stageRef.stageWidth || x &lt; 0)
 				removeSelf();
 			
 			if (hitTestObject(target.hit))
 			{
-				trace("hitME");
+				target.takeHit();
 				stageRef.addChild(new SmallImplosion(stageRef, x, y));
 				removeSelf();
 			}

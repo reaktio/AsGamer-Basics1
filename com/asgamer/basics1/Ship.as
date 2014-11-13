@@ -38,6 +38,11 @@ package com.asgamer.basics1
 			addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
 		}
 		
+		public function takeHit() : void
+		{
+			dispatchEvent(new Event("hit"));
+		}
+		
 		public function loop(e:Event) : void
 		{
 			//keypresses

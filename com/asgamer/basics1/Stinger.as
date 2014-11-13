@@ -15,8 +15,11 @@ package com.asgamer.basics1
 		private var ay:Number = .2;
 		private var target:Ship;
 		
+		public var points:int = 1020; //the points for killing this enemy
+		
 		public function Stinger(stageRef:Stage, target:Ship) : void
 		{
+			stop();
 			this.stageRef = stageRef;
 			this.target = target;
 			
@@ -28,14 +31,20 @@ package com.asgamer.basics1
 		
 		private function loop(e:Event) : void
 		{
-			vy += ay;
-			y += vy;
+			if (currentLabel != "destroyed")
+			{
+				vy += ay;
+				y += vy;
+				
+				if (y &gt; stageRef.stageHeight)
+					removeSelf();
+				
+				if (y - 15 &lt; target.y &amp;&amp; y + 15 &gt; target.y)
+					fireWeapon();
+			}
 			
-			if (y > stageRef.stageHeight)
+			if (currentLabel == "destroyedComplete")
 				removeSelf();
-			
-			if (y - 15 < target.y && y + 15 > target.y)
-				fireWeapon();
 		}
 		
 		private function fireWeapon() : void
@@ -55,7 +64,12 @@ package com.asgamer.basics1
 		
 		public function takeHit() : void
 		{
-			removeSelf();
+			if (currentLabel != "destroyed") //insure we can't keep killing the enemy ship... over and over
+			{
+				dispatchEvent(new Event("killed")); //our new ship killed event
+				rotation = Math.random() * 360;
+				gotoAndPlay("destroyed");
+			}
 		}
 		
 	}
